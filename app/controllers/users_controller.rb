@@ -61,7 +61,7 @@ class UsersController < ApplicationController
   def followers
     @title = 'Followers'
     @user = User.find(params[:id])
-    @users = @users.followers.paginate(page: params[:page])
+    @users = @user.followers.paginate(page: params[:page])
     render 'show_follow', status: :unprocessable_entity
   end
 
