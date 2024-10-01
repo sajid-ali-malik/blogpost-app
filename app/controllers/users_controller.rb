@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: %i[index edit update destroy]
+  before_action :logged_in_user, only: %i[index edit update destroy following followers]
   before_action :admin_user, only: :destroy
   def show
     @user = User.find(params[:id])
@@ -49,6 +49,20 @@ class UsersController < ApplicationController
 
   def password_reset_expired?
     reset_sent_at < 2.hours.ago
+  end
+
+  def following
+    @title = 'Following'
+    @user = User.find(params[:id])
+    @users = @user.following.paginate(page: params[:page])
+    render 'show_follow', status: :unprocessable_entity
+  end
+
+  def followers
+    @title = 'Followers'
+    @user = User.find(params[:id])
+    @users = @users.followers.paginate(page: params[:page])
+    render 'show_follow', status: :unprocessable_entity
   end
 
   private
